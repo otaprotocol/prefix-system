@@ -1,0 +1,9 @@
+pub mod submit_prefix_with_fee;
+pub mod approve_prefix;
+pub mod reject_prefix;
+pub mod refund_prefix_fee;
+pub mod update_prefix_metadata;
+pub mod update_prefix_authority;
+pub mod deactivate_prefix;
+pub mod reactivate_prefix;
+pub mod recover_prefix_owner_with_fee;
