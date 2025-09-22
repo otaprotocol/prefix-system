@@ -30,14 +30,14 @@ export class PrefixStatus {
 export interface PrefixAccount {
   owner: PublicKey;
   prefix: String; // normalized uppercase key used in PDA
-  metadata_uri: String;
-  metadata_hash: Buffer;
-  ref_hash: Buffer; // approval or rejection reference hash
+  metadataUri: String;
+  metadataHash: Buffer;
+  refHash: Buffer; // approval or rejection reference hash
   status: PrefixStatus;
-  authority_keys: PublicKey[];
-  fee_paid: BN;
-  expiry_at?: BN;
-  created_at: BN;
-  updated_at: BN;
+  authorityKeys: PublicKey[];
+  feePaid: BN;
+  expiryAt?: BN;
+  createdAt: BN;
+  updatedAt: BN;
   bump: number;
 }

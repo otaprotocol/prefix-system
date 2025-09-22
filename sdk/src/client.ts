@@ -38,8 +38,7 @@ export interface PrefixSystemClientConfig {
 }
 
 export class PrefixSystemClient {
-  private program: Program<PrefixSystem>;
-  private connection: Connection;
+  private _program: Program<PrefixSystem>;
   private anchorProvider: AnchorProvider;
   private staticPdas: {
     feeRegistry: PublicKey;
@@ -49,7 +48,6 @@ export class PrefixSystemClient {
 
   constructor(config: PrefixSystemClientConfig) {
     const { connection, wallet, programId, defaultCommitment } = config;
-    this.connection = connection;
     this.anchorProvider = new AnchorProvider(connection, wallet, {
       commitment: defaultCommitment || "confirmed",
     });
@@ -60,7 +58,7 @@ export class PrefixSystemClient {
       address: programId?.toString() || IDL.address,
     };
 
-    this.program = new Program(
+    this._program = new Program(
       idlWithProgramId as PrefixSystem,
       this.anchorProvider
     );
@@ -68,17 +66,17 @@ export class PrefixSystemClient {
     // Calculate PDAs in order since treasury depends on feeRegistry
     const feeRegistry = PublicKey.findProgramAddressSync(
       [Buffer.from(FEE_REGISTRY_SEED)],
-      this.program.programId
+      this._program.programId
     )[0];
 
     const verifiers = PublicKey.findProgramAddressSync(
       [Buffer.from(VERIFIERS_SEED)],
-      this.program.programId
+      this._program.programId
     )[0];
 
     const treasury = PublicKey.findProgramAddressSync(
       [Buffer.from(TREASURY_SEED), feeRegistry.toBuffer()],
-      this.program.programId
+      this._program.programId
     )[0];
 
     this.staticPdas = {
@@ -114,23 +112,27 @@ export class PrefixSystemClient {
     });
   }
 
+  public get program(): Program<PrefixSystem> {
+    return this._program;
+  }
+
   public get programId(): PublicKey {
-    return this.program.programId;
+    return this._program.programId;
   }
 
   /**
    * Get accounts
    */
   public async getFeeRegistry(): Promise<FeeRegistry> {
-    return this.program.account.feeRegistry.fetch(this.staticPdas.feeRegistry);
+    return this._program.account.feeRegistry.fetch(this.staticPdas.feeRegistry);
   }
 
   public async getVerifiersList(): Promise<VerifiersList> {
-    return this.program.account.verifiersList.fetch(this.staticPdas.verifiers);
+    return this._program.account.verifiersList.fetch(this.staticPdas.verifiers);
   }
 
   public async getTreasury(): Promise<Treasury> {
-    return this.program.provider.connection.getAccountInfo(
+    return this._program.provider.connection.getAccountInfo(
       this.staticPdas.treasury
     );
   }
@@ -138,9 +140,13 @@ export class PrefixSystemClient {
   public async getPrefixAccount(prefix: string): Promise<PrefixAccount> {
     validatePrefix(prefix);
 
-    return this.program.account.prefixAccount.fetch(
-      this.getPrefixPda(prefix)
-    ) as unknown as PrefixAccount;
+    try {
+      return this._program.account.prefixAccount.fetch(
+        this.getPrefixPda(prefix)
+      ) as unknown as PrefixAccount;
+    } catch {
+      return null;
+    }
   }
 
   // !!!! Admin functions !!!!
@@ -154,7 +160,7 @@ export class PrefixSystemClient {
     adminPublicKey: PublicKey,
     initialFee: number
   ): Promise<Transaction> {
-    const tx = await this.program.methods
+    const tx = await this._program.methods
       .initialize(adminPublicKey, new BN(initialFee))
       .accountsStrict({
         payer: this.anchorProvider.wallet.publicKey,
@@ -179,7 +185,7 @@ export class PrefixSystemClient {
     adminPublicKey: PublicKey,
     verifierPublicKey: PublicKey
   ): Promise<Transaction> {
-    const tx = await this.program.methods
+    const tx = await this._program.methods
       .addVerifier(verifierPublicKey)
       .accountsStrict({
         admin: adminPublicKey,
@@ -202,7 +208,7 @@ export class PrefixSystemClient {
     adminPublicKey: PublicKey,
     verifierPublicKey: PublicKey
   ): Promise<Transaction> {
-    const tx = await this.program.methods
+    const tx = await this._program.methods
       .removeVerifier(verifierPublicKey)
       .accountsStrict({
         admin: adminPublicKey,
@@ -225,7 +231,7 @@ export class PrefixSystemClient {
     adminPublicKey: PublicKey,
     newFee: number
   ): Promise<Transaction> {
-    const tx = await this.program.methods
+    const tx = await this._program.methods
       .updateFee(new BN(newFee))
       .accountsStrict({
         admin: adminPublicKey,
@@ -249,7 +255,7 @@ export class PrefixSystemClient {
     amount: number,
     toPublicKey: PublicKey
   ): Promise<Transaction> {
-    const tx = await this.program.methods
+    const tx = await this._program.methods
       .withdrawTreasury(new BN(amount), toPublicKey)
       .accountsStrict({
         admin: adminPublicKey,
@@ -279,7 +285,7 @@ export class PrefixSystemClient {
   ): Promise<Transaction> {
     validatePrefix(prefix);
 
-    const tx = await this.program.methods
+    const tx = await this._program.methods
       .approvePrefix(prefix, refHash)
       .accountsStrict({
         verifier: adminPublicKey,
@@ -308,7 +314,7 @@ export class PrefixSystemClient {
   ): Promise<Transaction> {
     validatePrefix(prefix);
 
-    const tx = await this.program.methods
+    const tx = await this._program.methods
       .rejectPrefix(prefix, reason)
       .accountsStrict({
         verifier: adminPublicKey,
@@ -334,7 +340,7 @@ export class PrefixSystemClient {
   ): Promise<Transaction> {
     validatePrefix(prefix);
 
-    const tx = await this.program.methods
+    const tx = await this._program.methods
       .deactivatePrefix(prefix)
       .accountsStrict({
         admin: adminPublicKey,
@@ -359,7 +365,7 @@ export class PrefixSystemClient {
   ): Promise<Transaction> {
     validatePrefix(prefix);
 
-    const tx = await this.program.methods
+    const tx = await this._program.methods
       .reactivatePrefix(prefix)
       .accountsStrict({
         admin: adminPublicKey,
@@ -384,7 +390,7 @@ export class PrefixSystemClient {
   ): Promise<Transaction> {
     validatePrefix(prefix);
 
-    const tx = await this.program.methods
+    const tx = await this._program.methods
       .refundPrefixFee(prefix)
       .accountsStrict({
         owner: adminPublicKey,
@@ -413,7 +419,7 @@ export class PrefixSystemClient {
   ): Promise<Transaction> {
     validatePrefix(prefix);
 
-    const tx = await this.program.methods
+    const tx = await this._program.methods
       .recoverPrefixOwnerWithFee(prefix, newOwner)
       .accountsStrict({
         newOwner: newOwner,
@@ -442,25 +448,20 @@ export class PrefixSystemClient {
     prefix: string,
     metadataUri: string,
     metadataHash: Array<number>,
+    signatureOverMetadataHash: Array<number>,
     authorityKeys: Array<PublicKey>
   ): Promise<Transaction> {
     validateMetadataUri(metadataUri);
     validateMetadataHash(metadataHash);
 
-    const existing = await this.getPrefixAccount(prefix);
-
-    if (existing) {
-      throw new PrefixSystemClientError("Prefix already exists");
-    }
-
     // Create Ed25519 signature over metadata_hash
     const ed25519Ix = Ed25519Program.createInstructionWithPublicKey({
       publicKey: ownerPublicKey.toBytes(),
       message: new Uint8Array(metadataHash),
-      signature: new Uint8Array(metadataHash),
+      signature: new Uint8Array(signatureOverMetadataHash),
     });
 
-    const tx = await this.program.methods
+    const tx = await this._program.methods
       .submitPrefixWithFee(prefix, metadataUri, metadataHash, authorityKeys)
       .accountsStrict({
         owner: ownerPublicKey,
@@ -489,7 +490,8 @@ export class PrefixSystemClient {
     ownerPublicKey: PublicKey,
     prefix: string,
     newMetadataUri: string,
-    newMetadataHash: Array<number>
+    newMetadataHash: Array<number>,
+    signatureOverMetadataHash: Array<number>
   ): Promise<Transaction> {
     validatePrefix(prefix);
     validateMetadataUri(newMetadataUri);
@@ -499,10 +501,10 @@ export class PrefixSystemClient {
     const ed25519Ix = Ed25519Program.createInstructionWithPublicKey({
       publicKey: ownerPublicKey.toBytes(),
       message: new Uint8Array(newMetadataHash),
-      signature: new Uint8Array(newMetadataHash),
+      signature: new Uint8Array(signatureOverMetadataHash),
     });
 
-    const tx = await this.program.methods
+    const tx = await this._program.methods
       .updatePrefixMetadata(prefix, newMetadataUri, newMetadataHash)
       .accountsStrict({
         owner: ownerPublicKey,
@@ -541,7 +543,7 @@ export class PrefixSystemClient {
       throw new PrefixSystemClientError("Duplicate authority keys");
     }
 
-    const tx = await this.program.methods
+    const tx = await this._program.methods
       .updatePrefixAuthority(prefix, authorityKeys)
       .accountsStrict({
         owner: ownerPublicKey,
@@ -561,7 +563,7 @@ export class PrefixSystemClient {
   public getPrefixPda(prefix: string): PublicKey {
     return PublicKey.findProgramAddressSync(
       [Buffer.from(PREFIX_SEED), Buffer.from(prefix.toUpperCase())],
-      this.program.programId
+      this._program.programId
     )[0];
   }
 }

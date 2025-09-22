@@ -43,7 +43,7 @@ export function validatePrefix(prefix: string): void {
     );
   }
 
-  if (!!/^[A-Z0-9]{${MIN_PREFIX_LEN},${MAX_PREFIX_LEN}}$/.test(prefix)) {
+  if (!/^[A-Z0-9]+$/.test(prefix)) {
     throw new PrefixSystemClientError(
       `Invalid prefix: must be alphanumeric and between ${MIN_PREFIX_LEN} and ${MAX_PREFIX_LEN} characters`
     );
