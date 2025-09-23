@@ -10,12 +10,14 @@ export async function getSharedTestContext(): Promise<{
   ctx: TestContext;
   verifier: Keypair;
   owner: Keypair;
+  admin: Keypair;
 }> {
   if (sharedContext) {
     return {
       ctx: sharedContext,
       verifier: sharedVerifier!,
       owner: sharedOwner!,
+      admin: sharedContext.admin,
     };
   }
 
@@ -37,5 +39,6 @@ export async function getSharedTestContext(): Promise<{
     ctx: sharedContext,
     verifier: sharedVerifier,
     owner: sharedOwner,
+    admin: sharedContext.admin,
   };
 }

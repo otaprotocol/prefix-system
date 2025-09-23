@@ -1,8 +1,9 @@
 import { expect } from "chai";
 import { Keypair, PublicKey, Connection } from "@solana/web3.js";
-import { AnchorProvider, Wallet } from "@coral-xyz/anchor";
+import { AnchorProvider } from "@coral-xyz/anchor";
 import { PrefixSystemClient } from "../../sdk/src/client";
 import * as nacl from "tweetnacl";
+import { getSharedTestContext } from "./helpers/shared-setup";
 import { 
   validatePrefix, 
   validateMetadataUri, 
@@ -19,75 +20,24 @@ describe("SDK Tests", () => {
   let verifier: Keypair;
 
   before(async () => {
-    // Set up local test environment
-    connection = new Connection("http://127.0.0.1:8899", "confirmed");
+    // Use the shared test context to get the same admin and verifier as other tests
+    const shared = await getSharedTestContext();
     
-    // Use deterministic keypairs for consistent testing
-    admin = Keypair.fromSeed(new Uint8Array(32).fill(1));
-    owner = Keypair.fromSeed(new Uint8Array(32).fill(2));
-    verifier = Keypair.fromSeed(new Uint8Array(32).fill(3));
+    // Extract the shared keypairs
+    admin = shared.admin;
+    verifier = shared.verifier;
+    owner = shared.owner;
+    
+    // Use the shared context's connection and provider
+    connection = shared.ctx.connection;
+    provider = shared.ctx.provider;
 
-    // Create provider and SDK
-    const wallet = new Wallet(admin);
-    provider = new AnchorProvider(connection, wallet, {
-      commitment: "confirmed",
-    });
-
+    // Create SDK with the shared admin
     sdk = PrefixSystemClient.initForTesting(connection, admin);
 
-    // Airdrop SOL to accounts
-    await airdrop(admin.publicKey, 10);
-    await airdrop(owner.publicKey, 10);
-    await airdrop(verifier.publicKey, 10);
-
-    // Initialize the prefix system (only if not already initialized)
-    try {
-      const initTx = await sdk.initialize(admin.publicKey, 1000000); // 0.001 SOL fee
-      await provider.sendAndConfirm(initTx, [admin]);
-    } catch (error) {
-      // If initialization fails with "already in use", the system is already initialized
-      if (error.message?.includes("already in use")) {
-        console.log("System already initialized, skipping initialization");
-      } else {
-        throw error;
-      }
-    }
-
-    // Check if we can access the system and add verifiers if we're the admin
-    const canAccess = await canAccessSystem();
-    if (canAccess) {
-      try {
-        const addAdminVerifierTx = await sdk.addVerifier(admin.publicKey, admin.publicKey);
-        await provider.sendAndConfirm(addAdminVerifierTx, [admin]);
-        console.log("Admin added as verifier");
-      } catch (error) {
-        if (error.message?.includes("already in use") || error.message?.includes("InvalidPrefixStatus")) {
-          console.log("Admin already added as verifier, skipping");
-        } else if (error.message?.includes("UnauthorizedAdmin")) {
-          console.log("System initialized with different admin, skipping verifier addition");
-          return; // Skip verifier addition if we're not the admin
-        } else {
-          throw error;
-        }
-      }
-      
-      try {
-        const addVerifierTx = await sdk.addVerifier(admin.publicKey, verifier.publicKey);
-        await provider.sendAndConfirm(addVerifierTx, [admin]);
-        console.log("Verifier added");
-      } catch (error) {
-        if (error.message?.includes("already in use") || error.message?.includes("InvalidPrefixStatus")) {
-          console.log("Verifier already added, skipping");
-        } else if (error.message?.includes("UnauthorizedAdmin")) {
-          console.log("System initialized with different admin, skipping verifier addition");
-          return; // Skip verifier addition if we're not the admin
-        } else {
-          throw error;
-        }
-      }
-    } else {
-      console.log("System not accessible, skipping verifier setup");
-    }
+    console.log(`Using shared admin: ${admin.publicKey.toString()}`);
+    console.log(`Using shared verifier: ${verifier.publicKey.toString()}`);
+    console.log(`Using shared owner: ${owner.publicKey.toString()}`);
   });
 
   after(async () => {
@@ -109,15 +59,6 @@ describe("SDK Tests", () => {
     return Array.from(nacl.sign.detached(message, signer.secretKey));
   }
 
-  // Helper function to check if we can access the system
-  async function canAccessSystem(): Promise<boolean> {
-    try {
-      await sdk.getFeeRegistry();
-      return true;
-    } catch {
-      return false;
-    }
-  }
 
   describe("1️⃣ SDK Initialization", () => {
     it("Should initialize SDK with correct program ID", () => {
@@ -288,8 +229,8 @@ describe("SDK Tests", () => {
 
     it("Should approve prefix", async () => {
       const refHash = new Array(32).fill(3);
-      const tx = await sdk.approvePrefix(admin.publicKey, testPrefix, refHash);
-      await provider.sendAndConfirm(tx, [admin]);
+      const tx = await sdk.approvePrefix(verifier.publicKey, testPrefix, refHash);
+      await provider.sendAndConfirm(tx, [verifier]);
 
       const prefixAccount = await sdk.getPrefixAccount(testPrefix);
       expect(prefixAccount.status).to.deep.equal({ active: {} });
@@ -298,8 +239,8 @@ describe("SDK Tests", () => {
 
     it("Should reject prefix", async () => {
       const reason = "Invalid metadata";
-      const tx = await sdk.rejectPrefix(admin.publicKey, testPrefix, reason);
-      await provider.sendAndConfirm(tx, [admin]);
+      const tx = await sdk.rejectPrefix(verifier.publicKey, testPrefix, reason);
+      await provider.sendAndConfirm(tx, [verifier]);
 
       const prefixAccount = await sdk.getPrefixAccount(testPrefix);
       expect(prefixAccount.status).to.deep.equal({ rejected: {} });
@@ -499,11 +440,11 @@ describe("SDK Tests", () => {
       // 2. Approve prefix
       const refHash = new Array(32).fill(8);
       const approveTx = await sdk.approvePrefix(
-        admin.publicKey,
+        verifier.publicKey,
         testPrefix,
         refHash
       );
-      await provider.sendAndConfirm(approveTx, [admin]);
+      await provider.sendAndConfirm(approveTx, [verifier]);
 
       prefixAccount = await sdk.getPrefixAccount(testPrefix);
       expect(prefixAccount.status).to.deep.equal({ active: {} });
@@ -531,11 +472,11 @@ describe("SDK Tests", () => {
       // 4. Approve again
       const newRefHash = new Array(32).fill(10);
       const approveTx2 = await sdk.approvePrefix(
-        admin.publicKey,
+        verifier.publicKey,
         testPrefix,
         newRefHash
       );
-      await provider.sendAndConfirm(approveTx2, [admin]);
+      await provider.sendAndConfirm(approveTx2, [verifier]);
 
       prefixAccount = await sdk.getPrefixAccount(testPrefix);
       expect(prefixAccount.status).to.deep.equal({ active: {} });
