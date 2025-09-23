@@ -1,0 +1,2101 @@
+{
+  "address": "otac5xyDhtoUWRXi36R9QN8Q9rW89QNJfUQDrZyiidh",
+  "metadata": {
+    "name": "prefix_system",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Action Codes Protocol Prefix System"
+  },
+  "instructions": [
+    {
+      "name": "add_verifier",
+      "discriminator": [
+        165,
+        72,
+        135,
+        225,
+        67,
+        181,
+        255,
+        135
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "signer": true
+        },
+        {
+          "name": "fee_registry",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "verifiers",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  101,
+                  114,
+                  105,
+                  102,
+                  105,
+                  101,
+                  114,
+                  115
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "verifier",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "approve_prefix",
+      "discriminator": [
+        155,
+        130,
+        58,
+        144,
+        235,
+        206,
+        247,
+        80
+      ],
+      "accounts": [
+        {
+          "name": "verifier",
+          "signer": true
+        },
+        {
+          "name": "fee_registry",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "verifiers",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  101,
+                  114,
+                  105,
+                  102,
+                  105,
+                  101,
+                  114,
+                  115
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "treasury"
+        },
+        {
+          "name": "prefix_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  101,
+                  102,
+                  105,
+                  120
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "prefix"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "prefix",
+          "type": "string"
+        },
+        {
+          "name": "ref_hash",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "deactivate_prefix",
+      "discriminator": [
+        204,
+        8,
+        250,
+        229,
+        95,
+        93,
+        67,
+        107
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "signer": true
+        },
+        {
+          "name": "fee_registry",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "prefix_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  101,
+                  102,
+                  105,
+                  120
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "prefix"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "prefix",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "initialize",
+      "discriminator": [
+        175,
+        175,
+        109,
+        31,
+        13,
+        152,
+        155,
+        237
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "docs": [
+            "Payer who funds the initial accounts (must be a signer)"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "fee_registry",
+          "docs": [
+            "Fee registry PDA"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "verifiers",
+          "docs": [
+            "Verifiers list PDA"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  101,
+                  114,
+                  105,
+                  102,
+                  105,
+                  101,
+                  114,
+                  115
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "treasury",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  101,
+                  97,
+                  115,
+                  117,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "fee_registry"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "admin_pubkey",
+          "type": "pubkey"
+        },
+        {
+          "name": "initial_fee",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "reactivate_prefix",
+      "discriminator": [
+        7,
+        33,
+        55,
+        144,
+        195,
+        34,
+        242,
+        239
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "signer": true
+        },
+        {
+          "name": "fee_registry",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "prefix_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  101,
+                  102,
+                  105,
+                  120
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "prefix"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "prefix",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "recover_prefix_owner_with_fee",
+      "discriminator": [
+        161,
+        252,
+        183,
+        129,
+        28,
+        153,
+        208,
+        98
+      ],
+      "accounts": [
+        {
+          "name": "new_owner",
+          "docs": [
+            "New owner who will pay the recovery fee"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "admin",
+          "docs": [
+            "Admin/multisig who authorizes the recovery"
+          ],
+          "signer": true
+        },
+        {
+          "name": "fee_registry",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "treasury",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  101,
+                  97,
+                  115,
+                  117,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "fee_registry"
+              }
+            ]
+          }
+        },
+        {
+          "name": "prefix_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  101,
+                  102,
+                  105,
+                  120
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "prefix"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "prefix",
+          "type": "string"
+        },
+        {
+          "name": "new_owner",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "refund_prefix_fee",
+      "discriminator": [
+        235,
+        130,
+        86,
+        154,
+        26,
+        65,
+        65,
+        249
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "fee_registry",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "treasury",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  101,
+                  97,
+                  115,
+                  117,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "fee_registry"
+              }
+            ]
+          }
+        },
+        {
+          "name": "prefix_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  101,
+                  102,
+                  105,
+                  120
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "prefix"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "prefix",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "reject_prefix",
+      "discriminator": [
+        27,
+        106,
+        152,
+        79,
+        143,
+        142,
+        116,
+        46
+      ],
+      "accounts": [
+        {
+          "name": "verifier",
+          "signer": true
+        },
+        {
+          "name": "fee_registry",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "verifiers",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  101,
+                  114,
+                  105,
+                  102,
+                  105,
+                  101,
+                  114,
+                  115
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "prefix_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  101,
+                  102,
+                  105,
+                  120
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "prefix"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "prefix",
+          "type": "string"
+        },
+        {
+          "name": "reason",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "remove_verifier",
+      "discriminator": [
+        179,
+        9,
+        132,
+        183,
+        233,
+        23,
+        172,
+        111
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "signer": true
+        },
+        {
+          "name": "fee_registry",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "verifiers",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  101,
+                  114,
+                  105,
+                  102,
+                  105,
+                  101,
+                  114,
+                  115
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "verifier",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "set_pause",
+      "discriminator": [
+        63,
+        32,
+        154,
+        2,
+        56,
+        103,
+        79,
+        45
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "signer": true
+        },
+        {
+          "name": "fee_registry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "pause",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "submit_prefix_with_fee",
+      "discriminator": [
+        36,
+        227,
+        120,
+        228,
+        189,
+        42,
+        195,
+        166
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "docs": [
+            "Owner must be signer to pay for account creation"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "fee_registry",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "treasury",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  101,
+                  97,
+                  115,
+                  117,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "fee_registry"
+              }
+            ]
+          }
+        },
+        {
+          "name": "prefix_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  101,
+                  102,
+                  105,
+                  120
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "prefix"
+              }
+            ]
+          }
+        },
+        {
+          "name": "instructions_sysvar",
+          "address": "Sysvar1nstructions1111111111111111111111111"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "prefix",
+          "type": "string"
+        },
+        {
+          "name": "metadata_uri",
+          "type": "string"
+        },
+        {
+          "name": "metadata_hash",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "authority_keys",
+          "type": {
+            "vec": "pubkey"
+          }
+        }
+      ]
+    },
+    {
+      "name": "update_fee",
+      "discriminator": [
+        232,
+        253,
+        195,
+        247,
+        148,
+        212,
+        73,
+        222
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "signer": true
+        },
+        {
+          "name": "fee_registry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "new_fee",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "update_prefix_authority",
+      "discriminator": [
+        81,
+        34,
+        201,
+        205,
+        160,
+        31,
+        146,
+        85
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "signer": true
+        },
+        {
+          "name": "prefix_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  101,
+                  102,
+                  105,
+                  120
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "prefix"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "prefix",
+          "type": "string"
+        },
+        {
+          "name": "authority_keys",
+          "type": {
+            "vec": "pubkey"
+          }
+        }
+      ]
+    },
+    {
+      "name": "update_prefix_metadata",
+      "discriminator": [
+        208,
+        18,
+        7,
+        217,
+        10,
+        21,
+        141,
+        252
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "signer": true
+        },
+        {
+          "name": "prefix_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  101,
+                  102,
+                  105,
+                  120
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "prefix"
+              }
+            ]
+          }
+        },
+        {
+          "name": "instructions_sysvar",
+          "address": "Sysvar1nstructions1111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "prefix",
+          "type": "string"
+        },
+        {
+          "name": "new_metadata_uri",
+          "type": "string"
+        },
+        {
+          "name": "new_metadata_hash",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "withdraw_treasury",
+      "discriminator": [
+        40,
+        63,
+        122,
+        158,
+        144,
+        216,
+        83,
+        96
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "signer": true
+        },
+        {
+          "name": "fee_registry",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "treasury",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  101,
+                  97,
+                  115,
+                  117,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "fee_registry"
+              }
+            ]
+          }
+        },
+        {
+          "name": "to",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "to",
+          "type": "pubkey"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "FeeRegistry",
+      "discriminator": [
+        201,
+        150,
+        48,
+        215,
+        144,
+        177,
+        181,
+        213
+      ]
+    },
+    {
+      "name": "PrefixAccount",
+      "discriminator": [
+        57,
+        137,
+        99,
+        5,
+        57,
+        10,
+        236,
+        73
+      ]
+    },
+    {
+      "name": "VerifiersList",
+      "discriminator": [
+        75,
+        207,
+        103,
+        108,
+        203,
+        15,
+        15,
+        249
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "FeeUpdated",
+      "discriminator": [
+        228,
+        75,
+        43,
+        103,
+        9,
+        196,
+        182,
+        4
+      ]
+    },
+    {
+      "name": "PrefixActivated",
+      "discriminator": [
+        117,
+        212,
+        125,
+        79,
+        252,
+        18,
+        79,
+        134
+      ]
+    },
+    {
+      "name": "PrefixApproved",
+      "discriminator": [
+        61,
+        152,
+        118,
+        94,
+        46,
+        118,
+        252,
+        190
+      ]
+    },
+    {
+      "name": "PrefixAuthorityUpdated",
+      "discriminator": [
+        25,
+        94,
+        192,
+        163,
+        229,
+        29,
+        255,
+        39
+      ]
+    },
+    {
+      "name": "PrefixDeactivated",
+      "discriminator": [
+        243,
+        73,
+        179,
+        248,
+        189,
+        255,
+        67,
+        57
+      ]
+    },
+    {
+      "name": "PrefixMetadataUpdated",
+      "discriminator": [
+        187,
+        126,
+        200,
+        26,
+        142,
+        203,
+        246,
+        0
+      ]
+    },
+    {
+      "name": "PrefixOwnerRecovered",
+      "discriminator": [
+        159,
+        47,
+        147,
+        172,
+        233,
+        220,
+        89,
+        135
+      ]
+    },
+    {
+      "name": "PrefixReactivated",
+      "discriminator": [
+        67,
+        17,
+        46,
+        224,
+        226,
+        173,
+        49,
+        90
+      ]
+    },
+    {
+      "name": "PrefixRefunded",
+      "discriminator": [
+        185,
+        77,
+        232,
+        59,
+        97,
+        175,
+        246,
+        251
+      ]
+    },
+    {
+      "name": "PrefixRejected",
+      "discriminator": [
+        152,
+        238,
+        98,
+        180,
+        223,
+        147,
+        27,
+        171
+      ]
+    },
+    {
+      "name": "PrefixSubmitted",
+      "discriminator": [
+        212,
+        152,
+        202,
+        170,
+        29,
+        251,
+        149,
+        39
+      ]
+    },
+    {
+      "name": "TreasuryWithdraw",
+      "discriminator": [
+        164,
+        41,
+        149,
+        134,
+        248,
+        87,
+        41,
+        218
+      ]
+    },
+    {
+      "name": "VerifierAdded",
+      "discriminator": [
+        113,
+        131,
+        132,
+        161,
+        53,
+        64,
+        96,
+        78
+      ]
+    },
+    {
+      "name": "VerifierRemoved",
+      "discriminator": [
+        87,
+        0,
+        8,
+        47,
+        151,
+        131,
+        51,
+        99
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "UnauthorizedAdmin",
+      "msg": "Unauthorized admin"
+    },
+    {
+      "code": 6001,
+      "name": "UnauthorizedVerifier",
+      "msg": "Unauthorized verifier"
+    },
+    {
+      "code": 6002,
+      "name": "InvalidPrefixFormat",
+      "msg": "Invalid prefix format"
+    },
+    {
+      "code": 6003,
+      "name": "PrefixAlreadyExists",
+      "msg": "Prefix already exists"
+    },
+    {
+      "code": 6004,
+      "name": "InvalidPrefixStatus",
+      "msg": "Prefix not in pending state"
+    },
+    {
+      "code": 6005,
+      "name": "InsufficientFee",
+      "msg": "Insufficient fee"
+    },
+    {
+      "code": 6006,
+      "name": "InvalidMetadataHashLength",
+      "msg": "Invalid metadata hash"
+    },
+    {
+      "code": 6007,
+      "name": "InvalidMetadataUri",
+      "msg": "Invalid metadata uri"
+    },
+    {
+      "code": 6008,
+      "name": "InvalidTreasuryAccount",
+      "msg": "Treasury not owned by program"
+    },
+    {
+      "code": 6009,
+      "name": "InsufficientTreasuryBalance",
+      "msg": "Insufficient treasury balance"
+    },
+    {
+      "code": 6010,
+      "name": "RefundNotAllowed",
+      "msg": "Refund not allowed in current state"
+    },
+    {
+      "code": 6011,
+      "name": "UnauthorizedOwnerAction",
+      "msg": "Only owner may perform this action"
+    },
+    {
+      "code": 6012,
+      "name": "MissingBump",
+      "msg": "Account bump missing"
+    },
+    {
+      "code": 6013,
+      "name": "FeeOperationsPaused",
+      "msg": "Fee operations paused"
+    },
+    {
+      "code": 6014,
+      "name": "PrefixExpired",
+      "msg": "Prefix expired"
+    },
+    {
+      "code": 6015,
+      "name": "AuthorityKeysTooMany",
+      "msg": "Invalid authority keys length"
+    },
+    {
+      "code": 6016,
+      "name": "InvalidEd25519Signature",
+      "msg": "Invalid Ed25519 signature"
+    }
+  ],
+  "types": [
+    {
+      "name": "FeeRegistry",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "current_fee",
+            "type": "u64"
+          },
+          {
+            "name": "pause",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "updated_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "FeeUpdated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "old_fee",
+            "type": "u64"
+          },
+          {
+            "name": "new_fee",
+            "type": "u64"
+          },
+          {
+            "name": "updated_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PrefixAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "prefix",
+            "type": "string"
+          },
+          {
+            "name": "metadata_uri",
+            "type": "string"
+          },
+          {
+            "name": "metadata_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "ref_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "PrefixStatus"
+              }
+            }
+          },
+          {
+            "name": "authority_keys",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "fee_paid",
+            "type": "u64"
+          },
+          {
+            "name": "expiry_at",
+            "type": "i64"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "updated_at",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PrefixActivated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "prefix",
+            "type": "string"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "authority_keys_len",
+            "type": "u8"
+          },
+          {
+            "name": "activated_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PrefixApproved",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "prefix",
+            "type": "string"
+          },
+          {
+            "name": "verifier",
+            "type": "pubkey"
+          },
+          {
+            "name": "ref_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "approved_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PrefixAuthorityUpdated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "prefix",
+            "type": "string"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "old_authority_keys",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "new_authority_keys",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "updated_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PrefixDeactivated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "prefix",
+            "type": "string"
+          },
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PrefixMetadataUpdated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "prefix",
+            "type": "string"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "old_metadata_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "new_metadata_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "updated_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PrefixOwnerRecovered",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "prefix",
+            "type": "string"
+          },
+          {
+            "name": "old_owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "fee_paid",
+            "type": "u64"
+          },
+          {
+            "name": "updated_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PrefixReactivated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "prefix",
+            "type": "string"
+          },
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PrefixRefunded",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "prefix",
+            "type": "string"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "refunded_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PrefixRejected",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "prefix",
+            "type": "string"
+          },
+          {
+            "name": "verifier",
+            "type": "pubkey"
+          },
+          {
+            "name": "reason",
+            "type": "string"
+          },
+          {
+            "name": "rejected_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PrefixStatus",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Pending"
+          },
+          {
+            "name": "Active"
+          },
+          {
+            "name": "Rejected"
+          },
+          {
+            "name": "Inactive"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PrefixSubmitted",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "prefix",
+            "type": "string"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "metadata_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "metadata_uri",
+            "type": "string"
+          },
+          {
+            "name": "fee_paid",
+            "type": "u64"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "pending_pda",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TreasuryWithdraw",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "to",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "withdrawn_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VerifierAdded",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "verifier",
+            "type": "pubkey"
+          },
+          {
+            "name": "added_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VerifierRemoved",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "verifier",
+            "type": "pubkey"
+          },
+          {
+            "name": "removed_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VerifiersList",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "verifiers",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "updated_at",
+            "type": "i64"
+          }
+        ]
+      }
+    }
+  ]
+}

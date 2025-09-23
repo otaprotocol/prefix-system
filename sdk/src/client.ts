@@ -11,8 +11,8 @@ import {
 } from "@solana/web3.js";
 import { AnchorProvider, BN, Program, Wallet } from "@coral-xyz/anchor";
 
-import { PrefixSystem } from "../../target/types/prefix_system";
-import IDL from "../../target/idl/prefix_system.json";
+import type { PrefixSystem } from "./idl/prefix_system";
+import IDL from "./idl/prefix_system.json";
 
 import {
   FEE_REGISTRY_SEED,
@@ -20,7 +20,7 @@ import {
   TREASURY_SEED,
   PREFIX_SEED,
   MAX_AUTH_KEYS,
-} from "./constants";
+} from "./constants.js";
 import { FeeRegistry, PrefixAccount, Treasury, VerifiersList } from "./types";
 import {
   validateMetadataHash,
@@ -131,13 +131,13 @@ export class PrefixSystemClient {
     return this._program.account.verifiersList.fetch(this.staticPdas.verifiers);
   }
 
-  public async getTreasury(): Promise<Treasury> {
+  public async getTreasury(): Promise<Treasury | null> {
     return this._program.provider.connection.getAccountInfo(
       this.staticPdas.treasury
     );
   }
 
-  public async getPrefixAccount(prefix: string): Promise<PrefixAccount> {
+  public async getPrefixAccount(prefix: string): Promise<PrefixAccount | null> {
     validatePrefix(prefix);
 
     try {
@@ -169,7 +169,7 @@ export class PrefixSystemClient {
         verifiers: this.staticPdas.verifiers,
         treasury: this.staticPdas.treasury,
       })
-      .signers([this.anchorProvider.wallet.payer])
+      .signers([this.anchorProvider.wallet.payer!])
       .transaction();
 
     return tx;
@@ -192,7 +192,7 @@ export class PrefixSystemClient {
         verifiers: this.staticPdas.verifiers,
         feeRegistry: this.staticPdas.feeRegistry,
       })
-      .signers([this.anchorProvider.wallet.payer])
+      .signers([this.anchorProvider.wallet.payer!])
       .transaction();
 
     return tx;
@@ -215,7 +215,7 @@ export class PrefixSystemClient {
         verifiers: this.staticPdas.verifiers,
         feeRegistry: this.staticPdas.feeRegistry,
       })
-      .signers([this.anchorProvider.wallet.payer])
+      .signers([this.anchorProvider.wallet.payer!])
       .transaction();
 
     return tx;
@@ -237,7 +237,7 @@ export class PrefixSystemClient {
         admin: adminPublicKey,
         feeRegistry: this.staticPdas.feeRegistry,
       })
-      .signers([this.anchorProvider.wallet.payer])
+      .signers([this.anchorProvider.wallet.payer!])
       .transaction();
 
     return tx;
@@ -264,7 +264,7 @@ export class PrefixSystemClient {
         feeRegistry: this.staticPdas.feeRegistry,
         systemProgram: SystemProgram.programId,
       })
-      .signers([this.anchorProvider.wallet.payer])
+      .signers([this.anchorProvider.wallet.payer!])
       .transaction();
 
     return tx;
@@ -294,7 +294,7 @@ export class PrefixSystemClient {
         prefixAccount: this.getPrefixPda(prefix),
         treasury: this.staticPdas.treasury,
       })
-      .signers([this.anchorProvider.wallet.payer])
+      .signers([this.anchorProvider.wallet.payer!])
       .transaction();
 
     return tx;
@@ -322,7 +322,7 @@ export class PrefixSystemClient {
         verifiers: this.staticPdas.verifiers,
         prefixAccount: this.getPrefixPda(prefix),
       })
-      .signers([this.anchorProvider.wallet.payer])
+      .signers([this.anchorProvider.wallet.payer!])
       .transaction();
 
     return tx;
@@ -347,7 +347,7 @@ export class PrefixSystemClient {
         feeRegistry: this.staticPdas.feeRegistry,
         prefixAccount: this.getPrefixPda(prefix),
       })
-      .signers([this.anchorProvider.wallet.payer])
+      .signers([this.anchorProvider.wallet.payer!])
       .transaction();
 
     return tx;
@@ -372,7 +372,7 @@ export class PrefixSystemClient {
         feeRegistry: this.staticPdas.feeRegistry,
         prefixAccount: this.getPrefixPda(prefix),
       })
-      .signers([this.anchorProvider.wallet.payer])
+      .signers([this.anchorProvider.wallet.payer!])
       .transaction();
 
     return tx;
@@ -399,7 +399,7 @@ export class PrefixSystemClient {
         feeRegistry: this.staticPdas.feeRegistry,
         systemProgram: SystemProgram.programId,
       })
-      .signers([this.anchorProvider.wallet.payer])
+      .signers([this.anchorProvider.wallet.payer!])
       .transaction();
 
     return tx;
@@ -429,7 +429,7 @@ export class PrefixSystemClient {
         prefixAccount: this.getPrefixPda(prefix),
         systemProgram: SystemProgram.programId,
       })
-      .signers([this.anchorProvider.wallet.payer])
+      .signers([this.anchorProvider.wallet.payer!])
       .transaction();
 
     return tx;
@@ -472,7 +472,7 @@ export class PrefixSystemClient {
         systemProgram: SystemProgram.programId,
       })
       .preInstructions([ed25519Ix])
-      .signers([this.anchorProvider.wallet.payer])
+      .signers([this.anchorProvider.wallet.payer!])
       .transaction();
 
     return tx;
@@ -512,7 +512,7 @@ export class PrefixSystemClient {
         instructionsSysvar: SYSVAR_INSTRUCTIONS_PUBKEY,
       })
       .preInstructions([ed25519Ix])
-      .signers([this.anchorProvider.wallet.payer])
+      .signers([this.anchorProvider.wallet.payer!])
       .transaction();
 
     return tx;
@@ -549,7 +549,7 @@ export class PrefixSystemClient {
         owner: ownerPublicKey,
         prefixAccount: this.getPrefixPda(prefix),
       })
-      .signers([this.anchorProvider.wallet.payer])
+      .signers([this.anchorProvider.wallet.payer!])
       .transaction();
 
     return tx;

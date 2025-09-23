@@ -10,7 +10,7 @@ pub mod utils;
 // Re-export all instruction contexts at crate root for Anchor
 pub use instructions::*;
 
-declare_id!("9VoBu2F7g4HcQKS4uSpHFbTs1158bgwNDzVxBDDM2ztQ");
+declare_id!("otac5xyDhtoUWRXi36R9QN8Q9rW89QNJfUQDrZyiidh");
 
 #[program]
 pub mod prefix_system {

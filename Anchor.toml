@@ -6,13 +6,13 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-prefix_system = "9VoBu2F7g4HcQKS4uSpHFbTs1158bgwNDzVxBDDM2ztQ"
+prefix_system = "otac5xyDhtoUWRXi36R9QN8Q9rW89QNJfUQDrZyiidh"
 
 [programs.devnet]
-prefix_system = "9VoBu2F7g4HcQKS4uSpHFbTs1158bgwNDzVxBDDM2ztQ"
+prefix_system = "otac5xyDhtoUWRXi36R9QN8Q9rW89QNJfUQDrZyiidh"
 
 [programs.mainnet]
-prefix_system = "9VoBu2F7g4HcQKS4uSpHFbTs1158bgwNDzVxBDDM2ztQ"
+prefix_system = "otac5xyDhtoUWRXi36R9QN8Q9rW89QNJfUQDrZyiidh"
 
 [registry]
 url = "https://api.apr.dev"

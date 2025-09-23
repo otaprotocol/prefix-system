@@ -1,15 +1,68 @@
 {
-  "name": "sdk",
+  "name": "@actioncodes/prefix-system",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "description": "Prefix System Client for Action Codes Protocol",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/otaprotocol/prefix-system"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "docs",
+    "dist",
+    "package.json",
+    "CHANGELOG.md",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "pnpm run lint && pnpm run build:js",
+    "build:js": "tsc",
+    "lint": "eslint .",
+    "test": "this is tested by anchor program tests",
+    "test:watch": "this is tested by anchor program tests",
+    "docs": "typedoc --out docs/ --entryPointStrategy expand --tsconfig ./tsconfig.json --plugin typedoc-plugin-markdown ./src",
+    "publish:package": "pnpm run lint && pnpm build && pnpm publish --access public",
+    "release": "pnpm run lint && pnpm version patch && pnpm build && pnpm publish --access public",
+    "release:patch": "pnpm run lint && pnpm version patch && pnpm build && pnpm publish --access public",
+    "release:minor": "pnpm run lint && pnpm version minor && pnpm build && pnpm publish --access public",
+    "release:major": "pnpm run lint && pnpm version major && pnpm build && pnpm publish --access public",
+    "publish:dry": "pnpm run lint && pnpm build && pnpm publish --access public --dry-run"
+  },
+  "keywords": [
+    "solana",
+    "actioncodes",
+    "prefix-system",
+    "ota-protocol"
+  ],
+  "author": "Trana Inc.",
+  "license": "Apache-2.0",
   "packageManager": "pnpm@10.14.0",
-  "dependencies": {
+  "peerDependencies": {
+    "@coral-xyz/anchor": "^0.31.1",
+    "@solana/web3.js": "^1.98.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.6",
+    "@semantic-release/npm": "^12.0.2",
+    "@typescript-eslint/eslint-plugin": "^8.44.1",
+    "@typescript-eslint/parser": "^8.44.1",
+    "eslint": "^9.36.0",
+    "semantic-release": "^24.2.9",
+    "ts-node": "^10.9.2",
+    "typedoc-plugin-markdown": "^4.9.0",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.44.1"
   }
 }
