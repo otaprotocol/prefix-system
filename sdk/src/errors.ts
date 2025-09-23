@@ -1,5 +1,5 @@
 import { ProgramError } from "@coral-xyz/anchor";
-import IDL from "../../target/idl/prefix_system.json";
+import IDL from "./idl/prefix_system.json";
 
 export class PrefixSystemClientError extends Error {
   public override name: string;
