@@ -6,6 +6,9 @@
     "type": "git",
     "url": "https://github.com/otaprotocol/prefix-system"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
